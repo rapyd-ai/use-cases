@@ -7,6 +7,14 @@ def read_reviews(path = 'data/reviews.csv'):
   d = pd.read_csv(path, header=None, names=['Review_Text'])
   return d 
 
+# Print the average text lenght and maximum text length
+def text_summary_stats(s):
+  text_lengths = s.apply(len)
+  average_length = text_lengths.mean()
+  min_length, max_length = text_lengths.min(), text_lengths.max()
+  print("The average sentence length is:", round(average_length), "characters")
+  print("The minimum and maximum length is:", min_length, max_length)
+
 # Check the average text lenght and plot it as a histogram
 def plot_text_length(s):
   hist = s.apply(len).hist()
