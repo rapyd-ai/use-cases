@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 
 # Read data where one line contains one text item
-def read_data(path = 'data/reviews.csv'):
+def read_reviews(path = 'data/reviews.csv'):
   d = pd.read_csv(path, header=None, names=['Review_Text'])
   return d 
 
