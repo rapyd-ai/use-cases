@@ -5,6 +5,7 @@ def get_sentiment_score(text, provider = "AUTO", language = "AUTO", account_id =
   text = text.strip()
   text = text.replace("'","")
   text = text.replace('"','')
+  text = text.replace('’',''
 
   # RAPYD.AI API Call as per https://www.rapyd.ai/docs
   url = "https://api.rapyd.ai/sentiment"
