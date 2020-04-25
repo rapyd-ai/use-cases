@@ -63,7 +63,7 @@ def get_sentiment_score(text, provider = "AUTO", language = "AUTO", account_id =
 def hashtag_frequency(s):
   hashtags = s
   # Clear stopwords
-  ignored_hashtags = ['#covid-19','#coronavirus','#covid19','#covid_19', '#corona', '#covid', '#coronakrise', '#covid2019', '#covid2019de', '#covid19de']
+  ignored_hashtags = ['#covid-19','#coronavirus','#covid19','#covid_19', '#corona', '#covid', '#coronakrise', '#covid2019', '#covid2019de', '#covid19de'. '#coronavirusde']
   hashtags = hashtags.split()
   hashtags  = [word for word in hashtags if word.lower() not in ignored_hashtags]
   hashtags = ' '.join(hashtags)
