@@ -5,7 +5,7 @@ def get_sentiment_score(text, provider = "AUTO", language = "AUTO", account_id =
   text = text.strip()
   text = text.replace("'","")
   text = text.replace('"','')
-  text = text.replace('’',''
+  text = text.replace('’','')
 
   # RAPYD.AI API Call as per https://www.rapyd.ai/docs
   url = "https://api.rapyd.ai/sentiment"
@@ -15,7 +15,7 @@ def get_sentiment_score(text, provider = "AUTO", language = "AUTO", account_id =
   'TOKEN': token,
   'Content-Type': 'application/json'
   }
-  response = requests.request("POST", url, headers=headers, data = payload)
+  response = requests.request("POST", url, headers=headers, data = payload.encode('UTF-8'))
   
   # Response handling 
   if provider == "AWS" or provider == "AUTO":
