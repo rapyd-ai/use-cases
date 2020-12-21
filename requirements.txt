@@ -1,0 +1,7 @@
+cv2
+requests
+json
+matplotlib==3.3.3
+numpy
+pandas
+
