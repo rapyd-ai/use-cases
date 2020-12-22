@@ -12,7 +12,6 @@ def localize_filter_label(response_json, label):
         print(response_json.text.encode('utf8'))
     
     if label == None:
-        print('helllo')
         json_data = {
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
             'labels': result['labels']
