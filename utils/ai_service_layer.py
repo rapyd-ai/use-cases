@@ -1,6 +1,6 @@
 import requests
 
-def rapydai_vision(self, filepath, task, provider = "gcp", accountid = '', token = ''):
+def rapydai_vision(filepath, task, provider = "gcp", accountid = '', token = ''):
     url = "https://api.rapyd.ai/v1/vision/"+task
     payload = {}
     files = [('file', open(filepath, 'rb'))]
@@ -12,7 +12,7 @@ def rapydai_vision(self, filepath, task, provider = "gcp", accountid = '', token
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
     return response
     
-def rapydai_nlp(self, text, task, provider = "gcp", accountid = '', token = ''):
+def rapydai_nlp(text, task, provider = "gcp", accountid = '', token = ''):
     url = "https://api.rapyd.ai/v1/nlp/"+task
     headers = {
         'ACCOUNT-ID': 'your-accountid',
