@@ -1,7 +1,7 @@
 import requests
 import json
 import cv2
-from preprocessing_layer import *
+from preprocessing_layer import PreprocessingLayer
 
 
 def localize_filter_label(response_json, label):
@@ -11,35 +11,44 @@ def localize_filter_label(response_json, label):
     except:
         print(response_json.text.encode('utf8'))
     
-    if provider == "aws":
+    if label == None:
+        print('helllo')
         json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+            'labels': result['labels']
         }
-        labels = result['labels']
-        value = [item  for item in labels if (item['name'] == label.capitalize() or item['name'] == label.lower() or item['name'] == label.upper())]
-        json_data['labels'] = value
         response_json = json.dumps(json_data)
 
-    if provider == "gcp":
-        json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta']
-        }
-        value = [item for item in result if (item['description'] == label.capitalize() or item['description'] == label.lower() or item['description'] == label.upper())]
-        json_data['labels'] = value
-        response_json = json.dumps(json_data)
-    
-    if provider == "azure":
-        json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta']
-        }
-        labels = result['objects']
-        value = [item  for item in labels if (item['object'] == label.capitalize() or item['object'] == label.lower() or item['object'] == label.upper())]
-        json_data['labels'] = value
-        response_json = json.dumps(json_data)
+    else:
+        if provider == "aws":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            }
+            labels = result['labels']
+            value = [item  for item in labels if (item['name'] == label.capitalize() or item['name'] == label.lower() or item['name'] == label.upper())]
+            json_data['labels'] = value
+            response_json = json.dumps(json_data)
 
-    if provider == "auto":
-        print("This AI task is not supported by the service provider. Please choose another one.")
-        return None
+        if provider == "gcp":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            }
+            value = [item for item in result if (item['description'] == label.capitalize() or item['description'] == label.lower() or item['description'] == label.upper())]
+            json_data['labels'] = value
+            response_json = json.dumps(json_data)
+        
+        if provider == "azure":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            }
+            labels = result['objects']
+            value = [item  for item in labels if (item['object'] == label.capitalize() or item['object'] == label.lower() or item['object'] == label.upper())]
+            json_data['labels'] = value
+            response_json = json.dumps(json_data)
+
+        if provider == "auto":
+            print("This AI task is not supported by the service provider. Please choose another one.")
+            return None
     
     return response_json
 
