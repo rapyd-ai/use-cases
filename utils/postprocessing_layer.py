@@ -14,8 +14,11 @@ def localize_filter_label(response_json, label):
     if label == None:
         json_data = {
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            'labels': result['labels']
         }
+        if provider == "aws":
+            json_data['labels'] = result['labels']
+        if provider == "gcp":
+            json_data['labels'] = result
         response_json = json.dumps(json_data)
 
     else:
@@ -70,7 +73,8 @@ def localize_filter_confidence(response_json, confidence):
         value = []
         for item in labels:
             instances = item['instances']
-            value = [obj for obj in instances if (obj['confidence'] > confidence*100)]
+            value.append([obj for obj in instances if (obj['confidence'] > confidence*100)])
+        value = list(filter(None, value))
         json_data['labels'] = value
         response_json = json.dumps(json_data)
 
