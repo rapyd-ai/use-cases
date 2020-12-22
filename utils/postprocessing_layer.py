@@ -1,6 +1,8 @@
 import requests
 import json
 import cv2
+from collections import Counter
+from operator import itemgetter
 from preprocessing_layer import cv2_write_image
 
 
@@ -164,22 +166,24 @@ def localize_aggregate(response_json, aggregate_function):
 
     if aggregate_function == "count":
         if provider == "azure":
-            aggregate_value = len(labels)
+            aggregate_response = len(labels)
             for item in labels:
                 names.append(item['object'])
         
         if provider == "aws":
-            aggregate_value = len(labels)
+            aggregate_response = len(labels)
         
         if provider == "gcp":
-            aggregate_value = len(labels)
+            count = Counter(map(itemgetter("description"), labels))
+            aggregate_response = dict(count)
+
     if aggregate_function == "max_conf":
-        aggregate_value = None
+        aggregate_response = None
 
     if aggregate_function == "min_conf":
-        aggregate_value = None
+        aggregate_response = None
 
-    return aggregate_value
+    return aggregate_response
 
 def cv2_transform_image(filepath, bounding_boxes, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
