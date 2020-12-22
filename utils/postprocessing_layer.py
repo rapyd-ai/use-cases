@@ -142,7 +142,8 @@ def localize_bounding_boxes(response_json, img_width, img_height):
             'meta': json.loads(response_json)['meta']
         }
         for item in labels:
-            for obj in item:
+            instances = item['instances']
+            for obj in instances:
                 rectangles = obj['boundingBox']
                 bounding_box = {
                     'y1': round(rectangles['top'] * img_height),
