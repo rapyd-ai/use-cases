@@ -7,3 +7,4 @@ def display_image(filepath):
 
 def display_text(text):
     display(HTML("<h2>" + text +"</h2>"))
+
