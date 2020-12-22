@@ -1,7 +1,7 @@
 import requests
 import json
 import cv2
-from preprocessing_layer import PreprocessingLayer
+from preprocessing_layer import *
 
 
 def localize_filter_label(response_json, label):
