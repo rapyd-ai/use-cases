@@ -163,7 +163,8 @@ def localize_aggregate(response_json, aggregate_function):
 
     if aggregate_function == "count":
         if provider == "azure":
-            aggregate_response = len(labels)
+            count = Counter(map(itemgetter("object"), labels))
+            aggregate_response = dict(count)
 
         if provider == "aws":
             aggregate_response = {}
