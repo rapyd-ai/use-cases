@@ -1,7 +1,7 @@
 import requests
 import json
 import cv2
-from preprocessing_layer import *
+from preprocessing_layer import cv2_write_image
 
 
 def localize_filter_label(response_json, label):
@@ -182,6 +182,3 @@ def cv2_transform_image(filepath, bounding_boxes, transformation):
         final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
     
     cv2_write_image(final, 'output.jpg')
-
-
-
