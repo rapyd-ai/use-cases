@@ -3,7 +3,7 @@ import json
 from google.colab import files
 
 # Upload from URL
-def file_upload_url(self, URL):
+def file_upload_url(URL):
     r = requests.get(URL, allow_redirects=True)
     open('input.jpg', 'wb').write(r.content)
     json_data = {
@@ -15,7 +15,7 @@ def file_upload_url(self, URL):
     return json_data
     
 # Upload from Sys
-def file_upload_colab(self):
+def file_upload_colab():
     json_data = {
         'Option': 'Upload from sys'
     }
