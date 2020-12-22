@@ -19,6 +19,8 @@ def localize_filter_label(response_json, label):
             json_data['labels'] = result['labels']
         if provider == "gcp":
             json_data['labels'] = result
+        if provider == "azure":
+            json_data['labels'] = result['objects']
         response_json = json.dumps(json_data)
 
     else:
