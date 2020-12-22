@@ -74,8 +74,9 @@ def localize_filter_confidence(response_json, confidence):
         }
         value = []
         for item in labels:
+            name = item['name']
             instances = item['instances']
-            value.append([obj for obj in instances if (obj['confidence'] > confidence*100)])
+            value.append([name, [obj for obj in instances if (obj['confidence'] > confidence*100)]])
         value = list(filter(None, value))
         json_data['labels'] = value
         response_json = json.dumps(json_data)
@@ -157,12 +158,21 @@ def localize_bounding_boxes(response_json, img_width, img_height):
     return response_json
 
 def localize_aggregate(response_json, aggregate_function):
-    # provider = json.loads(response_json)['meta']['provider']
+    provider = json.loads(response_json)['meta']['provider']
     labels = json.loads(response_json)['labels']
+    names = []
 
     if aggregate_function == "count":
-        aggregate_value = len(labels)
-    
+        if provider == "azure":
+            aggregate_value = len(labels)
+            for item in labels:
+                names.append(item['object'])
+        
+        if provider == "aws":
+            aggregate_value = len(labels)
+        
+        if provider == "gcp":
+            aggregate_value = len(labels)
     if aggregate_function == "max_conf":
         aggregate_value = None
 
