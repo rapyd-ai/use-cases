@@ -159,7 +159,6 @@ def localize_bounding_boxes(response_json, img_width, img_height):
 def localize_aggregate(response_json, aggregate_function):
     provider = json.loads(response_json)['meta']['provider']
     labels = json.loads(response_json)['labels']
-    names = []
 
     if aggregate_function == "count":
         if provider == "azure":
