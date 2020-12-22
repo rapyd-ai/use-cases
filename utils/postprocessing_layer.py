@@ -74,13 +74,10 @@ def localize_filter_confidence(response_json, confidence):
         json_data = {
             'meta': json.loads(response_json)['meta']
         }
-        value = []
         for item in labels:
-            name = item['name']
             instances = item['instances']
-            value.append([name, [obj for obj in instances if (obj['confidence'] > confidence*100)]])
-        value = list(filter(None, value))
-        json_data['labels'] = value
+            item['instances'] = list(filter(None, [obj for obj in instances if (obj['confidence'] > confidence*100)]))
+        json_data['labels'] = labels
         response_json = json.dumps(json_data)
 
     if provider == "gcp":
