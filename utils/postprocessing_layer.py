@@ -164,11 +164,14 @@ def localize_aggregate(response_json, aggregate_function):
     if aggregate_function == "count":
         if provider == "azure":
             aggregate_response = len(labels)
-            for item in labels:
-                names.append(item['object'])
-        
+
         if provider == "aws":
-            aggregate_response = len(labels)
+            aggregate_response = {}
+            for item in labels:
+                if len(item['instances']) != 0:
+                    aggregate_response[item['name']] = len(item['instances'])
+                else:
+                    aggregate_response[item['name']] = 1
         
         if provider == "gcp":
             count = Counter(map(itemgetter("description"), labels))
