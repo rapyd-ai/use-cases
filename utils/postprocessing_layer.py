@@ -223,7 +223,7 @@ def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     thickness = 2
 
     bounding_boxes = json.loads(bounding_boxes)["bounding_box"]
-    if bounding_boxes == [] or None:
+    if (bounding_boxes == [] or None):
         pass
     else:
         for value in bounding_boxes:
