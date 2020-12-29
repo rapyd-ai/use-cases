@@ -32,3 +32,11 @@ def cv2_resize_image(img, max_width=1600, max_height=1200):
 def cv2_write_image(cv2_img, filepath):
     # print("Writing output file to ", filepath)
     cv2.imwrite(filepath, cv2_img)
+
+def cv2_read_video(filepath):
+    # return cv2_video, length of the video and fps of the video
+    video = cv2.VideoCapture(filepath)
+    video_length = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+    video_fps = video.get(cv2.CAP_PROP_FPS)
+
+    return video, video_length, video_fps
