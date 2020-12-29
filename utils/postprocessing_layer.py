@@ -223,12 +223,15 @@ def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     thickness = 2
 
     bounding_boxes = json.loads(bounding_boxes)["bounding_box"]
-    for value in bounding_boxes:
-        y1 = value['y1']
-        y2 = value['y2']
-        x1 = value['x1']
-        x2 = value['x2']
-        final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
-    
-    cv2_write_image(final, output_file)
+    if bounding_boxes == [] or None:
+        continue
+    else:
+        for value in bounding_boxes:
+            y1 = value['y1']
+            y2 = value['y2']
+            x1 = value['x1']
+            x2 = value['x2']
+            final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
+        
+        cv2_write_image(final, output_file)
 
