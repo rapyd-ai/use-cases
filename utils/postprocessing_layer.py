@@ -186,7 +186,7 @@ def localize_aggregate(response_json, aggregate_function):
 
     return aggregate_response
 
-def cv2_transform_image(filepath, bounding_boxes, transformation):
+def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
     
     # Defining Box params
@@ -201,4 +201,5 @@ def cv2_transform_image(filepath, bounding_boxes, transformation):
         x2 = value['x2']
         final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
     
-    cv2_write_image(final, 'output.jpg')
+    cv2_write_image(final, output_file)
+
