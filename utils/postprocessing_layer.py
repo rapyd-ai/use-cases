@@ -186,6 +186,35 @@ def localize_aggregate(response_json, aggregate_function):
 
     return aggregate_response
 
+def landmark_bounding_boxes(response_json):
+    provider = json.loads(response_json)['meta']['provider']
+    result = json.loads(response_json)['result']
+    boxes = []
+
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in result:
+            description = item['description'] 
+            rectangles = item["boundingPoly"]
+            y1 = rectangles[0]['y']
+            y2 = rectangles[2]['y']
+            x1 = rectangles[0]['x']
+            x2 = rectangles[2]['x']
+            bounding_box = {
+                'y1': y1,
+                'y2': y2,
+                'x1': x1,
+                'x2': x2
+            }
+            boxes.append(bounding_box)
+
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+    
+    return response_json
+
 def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
     
