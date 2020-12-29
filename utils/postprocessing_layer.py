@@ -224,7 +224,7 @@ def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
 
     bounding_boxes = json.loads(bounding_boxes)["bounding_box"]
     if bounding_boxes == [] or None:
-        continue
+        pass
     else:
         for value in bounding_boxes:
             y1 = value['y1']
