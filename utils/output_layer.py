@@ -8,3 +8,7 @@ def display_image(filepath):
 def display_text(text):
     display(HTML("<h2>" + text +"</h2>"))
 
+# Write image to disk
+def cv2_write_image(cv2_img, filepath):
+    # print("Writing output file to ", filepath)
+    cv2.imwrite(filepath, cv2_img)
