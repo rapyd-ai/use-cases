@@ -1,4 +1,5 @@
 import cv2
+from IPython.display import clear_output
 
 # Read image
 def cv2_read_image(filepath):
@@ -52,3 +53,22 @@ def cv2_get_user_frames(fps, video_length, video_fps):
     user_frames = [i for (i, v) in zip(frame_index, frame_filter) if v]
 
     return user_frames
+
+def cv2_export_user_frames_to_images(video, video_length, user_frames, filepath):
+    i=0
+    while(video.isOpened()):
+        ret, frame = video.read()
+        if ret == False:
+            break
+        if i in user_frames:
+            # Progress Percent
+            clear_output()
+            percent_complete = i / video_length
+            percentage = "{:.0%}".format(percent_complete)
+            print("Processing video: "+ percentage)
+            # Write frame to disk
+            cv2.imwrite(filepath+str(i)+'.jpg',frame)
+        i+=1
+    video.release()
+    cv2.destroyAllWindows()
+    clear_output()
