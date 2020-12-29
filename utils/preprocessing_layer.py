@@ -29,11 +29,6 @@ def cv2_resize_image(img, max_width=1600, max_height=1200):
     
     return img
 
-# Write image to disk
-def cv2_write_image(cv2_img, filepath):
-    # print("Writing output file to ", filepath)
-    cv2.imwrite(filepath, cv2_img)
-
 def cv2_read_video(filepath):
     # return cv2_video, length of the video and fps of the video
     video = cv2.VideoCapture(filepath)
