@@ -40,3 +40,15 @@ def cv2_read_video(filepath):
     video_fps = video.get(cv2.CAP_PROP_FPS)
 
     return video, video_length, video_fps
+
+def cv2_get_user_frames(fps, video_length, video_fps):
+    # Select video frames based on user FPS_INPUT ----
+    frame_index = [i for i in range(0, video_length)]
+    # Create filter for every nth image frame according to user input
+    frame_filter = [0 for i in range(0,video_length)]
+    skip_frames = int(video_fps / fps)
+    frame_filter[0::skip_frames] = [x+1 for x in frame_filter[0::skip_frames]]
+    # Subset filename list according to frame_filter
+    user_frames = [i for (i, v) in zip(frame_index, frame_filter) if v]
+
+    return user_frames
