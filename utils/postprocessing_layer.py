@@ -3,7 +3,7 @@ import json
 import cv2
 from collections import Counter
 from operator import itemgetter
-from preprocessing_layer import cv2_write_image
+from output_layer import cv2_write_image
 
 
 def localize_filter_label(response_json, label):
