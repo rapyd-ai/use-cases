@@ -198,10 +198,10 @@ def landmark_bounding_boxes(response_json):
         for item in result:
             description = item['description'] 
             rectangles = item["boundingPoly"]
-            y1 = rectangles[0]['y']
-            y2 = rectangles[2]['y']
-            x1 = rectangles[0]['x']
-            x2 = rectangles[2]['x']
+            y1 = rectangles[3]['y']
+            y2 = rectangles[1]['y']
+            x1 = rectangles[3]['x']
+            x2 = rectangles[1]['x']
             bounding_box = {
                 'y1': y1,
                 'y2': y2,
