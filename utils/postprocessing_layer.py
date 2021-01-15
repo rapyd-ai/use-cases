@@ -92,7 +92,20 @@ def text_extract_detections(response_json):
 
     return response_json
 
+def text_extract_labels(response_json):
+    provider = json.loads(response_json)['meta']['provider']
+    textDetections = json.loads(response_json)['textDetections']
 
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        text = [item["detectedText"] for item in textDetections]
+        json_data['labels'] = text
+        response_json = json.dumps(json_data)
+    
+    return response_json
+                
 
 
 def localize_filter_confidence(response_json, confidence):
