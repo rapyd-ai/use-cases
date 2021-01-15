@@ -166,6 +166,26 @@ def text_bounding_boxes(response_json, img_width, img_height):
         json_data['bounding_box'] = boxes
         response_json = json.dumps(json_data)
     
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in result:
+            for lines in item['lines']:
+                words = lines['words']
+                values = [value["boundingBox"] for value in words]
+                bounds = [list(each.split(",")) for each in values]
+                for rectangles in bounds:
+                    bounding_box = {
+                        'y1': int(rectangles[1]),
+                        'y2': int(rectangles[3]),
+                        'x1': int(rectangles[0]),
+                        'x2': int(rectangles[2])
+                    }
+                    boxes.append(bounding_box)
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+
     return response_json
     
 
