@@ -104,9 +104,62 @@ def text_extract_labels(response_json):
         json_data['labels'] = text
         response_json = json.dumps(json_data)
     
-    return response_json
-                
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        text = [item["description"] for item in textDetections]
+        json_data['labels'] = text
+        response_json = json.dumps(json_data)
 
+    
+    return response_json
+
+def text_bounding_boxes(response_json, img_width, img_height):
+    provider = json.loads(response_json)['meta']['provider']
+    result = json.loads(response_json)['textDetections']
+    boxes = []
+
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in result:
+            rectangles = item["boundingPoly"]
+            y1 = rectangles[3]['y']
+            y2 = rectangles[1]['y']
+            x1 = rectangles[3]['x']
+            x2 = rectangles[1]['x']
+            bounding_box = {
+                'y1': y1,
+                'y2': y2,
+                'x1': x1,
+                'x2': x2
+            }
+            boxes.append(bounding_box)
+
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+    
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in result:
+            rectangles = item["geometry"]["boundingBox"]
+            bounding_box = {
+                'y1': round(rectangles['top'] * img_height),
+                'y2': round((rectangles['top'] * img_height) + (rectangles['height'] * img_height)),
+                'x1': round(rectangles['left'] * img_width),
+                'x2': round((rectangles['left'] * img_width) + (rectangles['width'] * img_width))
+            }
+            boxes.append(bounding_box)
+            
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+    
+    return response_json
+    
 
 def localize_filter_confidence(response_json, confidence):
     provider = json.loads(response_json)['meta']['provider']
