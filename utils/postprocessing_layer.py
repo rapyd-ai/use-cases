@@ -109,8 +109,18 @@ def text_extract_labels(response_json):
         text = [item["description"] for item in textDetections]
         json_data['labels'] = text
         response_json = json.dumps(json_data)
-
     
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in textDetections:
+            for lines in item['lines']:
+                words = lines["words"]
+                text = [value['text'] for value in words]
+        json_data['labels'] = text
+        response_json = json.dumps(json_data)
+        
     return response_json
 
 def text_bounding_boxes(response_json, img_width, img_height):
