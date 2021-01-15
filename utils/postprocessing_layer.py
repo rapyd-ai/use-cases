@@ -59,7 +59,7 @@ def localize_filter_label(response_json, label):
     return response_json
 
 def text_extract_detections(response_json):
-     try:
+    try:
         result = json.loads(response_json.text.encode('utf8'))['result']
         provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
     except:
@@ -72,7 +72,7 @@ def text_extract_detections(response_json):
         textDetection = result["textDetections"]
         json_data['textDetections'] = textDetection
         response_json = json.dumps(json_data)
-        
+    
     return response_json
 
 
