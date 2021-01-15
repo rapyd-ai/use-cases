@@ -70,7 +70,6 @@ def text_extract_detections(response_json):
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
         }
         textDetection = result["textDetections"]
-        # text = [item['detectedText'] for item in textDetection]
         json_data['textDetections'] = textDetection
         response_json = json.dumps(json_data)
     
@@ -78,7 +77,6 @@ def text_extract_detections(response_json):
         json_data = {
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
         }
-        # text = [item["description"] for item in result]
         json_data['textDetections'] = result
         response_json = json.dumps(json_data)
     
@@ -154,7 +152,7 @@ def text_bounding_boxes(response_json, img_width, img_height):
                 'x2': round((rectangles['left'] * img_width) + (rectangles['width'] * img_width))
             }
             boxes.append(bounding_box)
-            
+
         json_data['bounding_box'] = boxes
         response_json = json.dumps(json_data)
     
