@@ -82,7 +82,17 @@ def text_extract_detections(response_json):
         json_data['textDetections'] = result
         response_json = json.dumps(json_data)
     
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        textDetection = result['regions']
+        json_data['textDetections'] = textDetection
+        response_json = json.dumps(json_data)
+
+    
     return response_json
+
 
 
 
