@@ -178,9 +178,9 @@ def text_bounding_boxes(response_json, img_width, img_height):
                 for rectangles in bounds:
                     bounding_box = {
                         'y1': int(rectangles[1]),
-                        'y2': int(rectangles[2]),
+                        'y2': int(rectangles[3]),
                         'x1': int(rectangles[0]),
-                        'x2': int(rectangles[3])
+                        'x2': int(rectangles[2])
                     }
                     boxes.append(bounding_box)
         json_data['bounding_box'] = boxes
