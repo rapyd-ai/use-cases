@@ -67,7 +67,7 @@ def text_extract_detections(response_json):
     
     if provider == "aws":
         json_data = {
-            'meta': json.loads(response_json)['meta']
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
         }
         textDetection = result["textDetections"]
         json_data['textDetections'] = textDetection
