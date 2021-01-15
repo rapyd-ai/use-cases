@@ -90,7 +90,6 @@ def text_extract_detections(response_json):
         json_data['textDetections'] = textDetection
         response_json = json.dumps(json_data)
 
-    
     return response_json
 
 
