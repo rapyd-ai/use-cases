@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 
 def rapydai_vision(filepath, task, provider = "gcp", accountid = '', token = ''):
     url = "https://api.rapyd.ai/v1/vision/"+task
@@ -14,6 +15,25 @@ def rapydai_vision(filepath, task, provider = "gcp", accountid = '', token = '')
     return response
     
 def rapydai_nlp(text, task, provider = "gcp", accountid = '', token = ''):
+    # cleaning text
+    # escaped = a_string.translate(str.maketrans({"-":  r"\-",
+    #                                       "]":  r"\]",
+    #                                       "\\": r"\\",
+    #                                       "^":  r"\^",
+    #                                       "$":  r"\$",
+    #                                       "*":  r"\*",
+    #                                       ".":  r"\.",
+    #                                       ",":  r"\,",
+    #                                       ";":  r"\;",
+    #                                       ":":  r"\:",
+    #                                       "<":  r"\<",
+    #                                       ">":  r"\>",
+    #                                       "|":  r"\|",
+    #                                       "—":  r"\—",
+    #                                       "”":  r"\”",
+    #                                       "“":  r"\“",
+    #                                       "’":  r"\’"}))
+    clean_text = re.escape(a_string)
     url = "https://api.rapyd.ai/v1/nlp/"+task
     headers = {
         'ACCOUNT-ID': 'your-accountid',
@@ -21,7 +41,7 @@ def rapydai_nlp(text, task, provider = "gcp", accountid = '', token = ''):
         'Content-Type': 'application/json'
     }
     payload = {
-        "text": text,
+        "text": clean_text,
         "provider": provider,
         "language": "auto"
     }
