@@ -33,7 +33,7 @@ def rapydai_nlp(text, task, provider = "gcp", accountid = '', token = ''):
     #                                       "”":  r"\”",
     #                                       "“":  r"\“",
     #                                       "’":  r"\’"}))
-    clean_text = re.escape(a_string)
+    clean_text = re.escape(text)
     url = "https://api.rapyd.ai/v1/nlp/"+task
     headers = {
         'ACCOUNT-ID': 'your-accountid',
