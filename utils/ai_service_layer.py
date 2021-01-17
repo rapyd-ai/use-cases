@@ -15,33 +15,14 @@ def rapydai_vision(filepath, task, provider = "gcp", accountid = '', token = '')
     return response
     
 def rapydai_nlp(text, task, provider = "gcp", accountid = '', token = ''):
-    # cleaning text
-    # escaped = a_string.translate(str.maketrans({"-":  r"\-",
-    #                                       "]":  r"\]",
-    #                                       "\\": r"\\",
-    #                                       "^":  r"\^",
-    #                                       "$":  r"\$",
-    #                                       "*":  r"\*",
-    #                                       ".":  r"\.",
-    #                                       ",":  r"\,",
-    #                                       ";":  r"\;",
-    #                                       ":":  r"\:",
-    #                                       "<":  r"\<",
-    #                                       ">":  r"\>",
-    #                                       "|":  r"\|",
-    #                                       "—":  r"\—",
-    #                                       "”":  r"\”",
-    #                                       "“":  r"\“",
-    #                                       "’":  r"\’"}))
-    clean_text = re.escape(text)
     url = "https://api.rapyd.ai/v1/nlp/"+task
     headers = {
-        'ACCOUNT-ID': 'your-accountid',
-        'Authorization': 'Bearer your-token',
+        'ACCOUNT-ID': accountid,
+        'Authorization': 'Bearer '+token,
         'Content-Type': 'application/json'
     }
     payload = {
-        "text": clean_text,
+        "text": text,
         "provider": provider,
         "language": "auto"
     }
