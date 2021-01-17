@@ -365,6 +365,15 @@ def entities_extract_type(response_json, entity_type):
         json_data['types'] = types
         response_json = json.dumps(json_data)
     
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        types = [value["name"] for value in result if (value["type"] == entity_type)]
+        json_data['types'] = types
+        response_json = json.dumps(json_data)
+    
+    
     return response_json
 
 
