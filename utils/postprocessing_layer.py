@@ -5,59 +5,7 @@ from collections import Counter
 from operator import itemgetter
 from output_layer import cv2_write_image
 
-
-def localize_filter_label(response_json, label):
-    try:
-        result = json.loads(response_json.text.encode('utf8'))['result']
-        provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
-    except:
-        print(response_json.text.encode('utf8'))
-    
-    if label == None:
-        json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-        }
-        if provider == "aws":
-            json_data['labels'] = result['labels']
-        if provider == "gcp":
-            json_data['labels'] = result
-        if provider == "azure":
-            json_data['labels'] = result['objects']
-        response_json = json.dumps(json_data)
-
-    else:
-        if provider == "aws":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta']
-            }
-            labels = result['labels']
-            value = [item  for item in labels if (item['name'] == label.capitalize() or item['name'] == label.lower() or item['name'] == label.upper())]
-            json_data['labels'] = value
-            response_json = json.dumps(json_data)
-
-        if provider == "gcp":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta']
-            }
-            value = [item for item in result if (item['description'] == label.capitalize() or item['description'] == label.lower() or item['description'] == label.upper())]
-            json_data['labels'] = value
-            response_json = json.dumps(json_data)
-        
-        if provider == "azure":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta']
-            }
-            labels = result['objects']
-            value = [item  for item in labels if (item['object'] == label.capitalize() or item['object'] == label.lower() or item['object'] == label.upper())]
-            json_data['labels'] = value
-            response_json = json.dumps(json_data)
-
-        if provider == "auto":
-            print("This AI task is not supported by the service provider. Please choose another one.")
-            return None
-    
-    return response_json
-
+# Vision API - Text service
 def text_extract_detections(response_json):
     try:
         result = json.loads(response_json.text.encode('utf8'))['result']
@@ -188,6 +136,58 @@ def text_bounding_boxes(response_json, img_width, img_height):
 
     return response_json
     
+# Vision API - localize service
+def localize_filter_label(response_json, label):
+    try:
+        result = json.loads(response_json.text.encode('utf8'))['result']
+        provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
+    except:
+        print(response_json.text.encode('utf8'))
+    
+    if label == None:
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        if provider == "aws":
+            json_data['labels'] = result['labels']
+        if provider == "gcp":
+            json_data['labels'] = result
+        if provider == "azure":
+            json_data['labels'] = result['objects']
+        response_json = json.dumps(json_data)
+
+    else:
+        if provider == "aws":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            }
+            labels = result['labels']
+            value = [item  for item in labels if (item['name'] == label.capitalize() or item['name'] == label.lower() or item['name'] == label.upper())]
+            json_data['labels'] = value
+            response_json = json.dumps(json_data)
+
+        if provider == "gcp":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            }
+            value = [item for item in result if (item['description'] == label.capitalize() or item['description'] == label.lower() or item['description'] == label.upper())]
+            json_data['labels'] = value
+            response_json = json.dumps(json_data)
+        
+        if provider == "azure":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta']
+            }
+            labels = result['objects']
+            value = [item  for item in labels if (item['object'] == label.capitalize() or item['object'] == label.lower() or item['object'] == label.upper())]
+            json_data['labels'] = value
+            response_json = json.dumps(json_data)
+
+        if provider == "auto":
+            print("This AI task is not supported by the service provider. Please choose another one.")
+            return None
+    
+    return response_json
 
 def localize_filter_confidence(response_json, confidence):
     provider = json.loads(response_json)['meta']['provider']
@@ -317,6 +317,7 @@ def localize_aggregate(response_json, aggregate_function):
 
     return aggregate_response
 
+# Vision API - landmark service
 def landmark_bounding_boxes(response_json):
     provider = json.loads(response_json)['meta']['provider']
     result = json.loads(response_json)['result']
@@ -345,6 +346,27 @@ def landmark_bounding_boxes(response_json):
         response_json = json.dumps(json_data)
     
     return response_json
+
+# NLP API - entities service
+
+def entities_extract_type(response_json, entity_type):
+    try:
+        result = json.loads(response_json.text.encode('utf8'))['result']
+        provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
+    except:
+        print(response_json.text.encode('utf8'))
+    
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        entities = result['entities']
+        types = [value["text"] for value in entities if (value["type"] == entity_type)]
+        json_data['types'] = types
+        response_json = json.dumps(json_data)
+    
+    return response_json
+
 
 def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
