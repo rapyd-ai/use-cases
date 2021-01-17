@@ -361,7 +361,7 @@ def entities_extract_type(response_json, entity_type):
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
         }
         entities = result['entities']
-        types = [value["text"] for value in entities if (value["type"] == entity_type)]
+        types = [value["text"] for value in entities if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
         json_data['types'] = types
         response_json = json.dumps(json_data)
     
@@ -369,11 +369,18 @@ def entities_extract_type(response_json, entity_type):
         json_data = {
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
         }
-        types = [value["name"] for value in result if (value["type"] == entity_type)]
+        types = [value["name"] for value in result if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
         json_data['types'] = types
         response_json = json.dumps(json_data)
     
-    
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        types = [value["text"] for value in result if (value["category"] == entity_type.upper() or value["category"] == entity_type.lower() or value["category"] == entity_type.capitalize())]
+        json_data['types'] = types
+        response_json = json.dumps(json_data)
+        
     return response_json
 
 
