@@ -4,6 +4,8 @@ import cv2
 from collections import Counter
 from operator import itemgetter
 from output_layer import cv2_write_image
+import pandas as pd
+import numpy as np
 
 # Vision API - Text service
 def text_extract_detections(response_json):
@@ -137,6 +139,7 @@ def text_bounding_boxes(response_json, img_width, img_height):
     return response_json
 
 def text_filter_entity(labels, word_list):
+    pd.options.mode.chained_assignment = None # To avoid the warnings
     # NOTE: ---------------------------------
     # labels parameter must be the return value of text_extract_labels() function
     # ---------------------------------------
