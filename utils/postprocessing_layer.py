@@ -135,6 +135,23 @@ def text_bounding_boxes(response_json, img_width, img_height):
         response_json = json.dumps(json_data)
 
     return response_json
+
+def text_filter_entity(labels, word_list):
+    # NOTE: ---------------------------------
+    # labels parameter must be the return value of text_extract_labels() function
+    # ---------------------------------------
+    input_df = pd.DataFrame()
+    input_df['labels'] = json.loads(labels)['labels']
+
+    words=(map(lambda x: [x.capitalize(), x.lower(), x.upper()], word_list)) # Append the list with the words that might help refine the search for exipry date
+    terms = []
+    [terms.extend(i) for i in list(words)]
+
+    # Matching regex pattern for the words we want to find
+    match_pattern = fr"\b(?:{'|'.join(terms)})\b"
+    return_df = input_df['labels'].str.contains(match_pattern, case=False)
+
+    return return_df
     
 # Vision API - localize service
 def localize_filter_label(response_json, label):
