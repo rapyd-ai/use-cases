@@ -377,8 +377,55 @@ def entities_extract_type(response_json, entity_type):
         print(response_json.text.encode('utf8'))
     
     if (entity_type == "all".upper() or entity_type == "all".lower or entity_type == "all".capitalize()):
+        if provider == "aws":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+            }
+            instances = result['entities']
+            entities = []
+            for value in instances:
+                item = {}
+                item['startOffset'] = value['beginOffset']
+                item['endOffset'] = value['endOffset']
+                item['entity_type'] = value['type']
+                item['entity_text'] = value['text']
+                item['score'] = value['score']
+                entities.append(item)
+            json_data['entities'] = entities
+            response_json = json.dumps(json_data)
         
-    
+        if provider == "gcp":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+            }
+            entities = []
+            for value in result:
+                item = {}
+                item['startOffset'] = None
+                item['endOffset'] = None
+                item['entity_type'] = value['type']
+                item['entity_text'] = value['name']
+                item['score'] = value['salience']
+                entities.append(item)
+            json_data['entities'] = entities
+            response_json = json.dumps(json_data)
+        
+        if provider == "azure":
+            json_data = {
+                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+            }
+            entities = []
+            for value in result:
+                item = {}
+                item['startOffset'] = None
+                item['endOffset'] = None
+                item['entity_type'] = value['category']
+                item['entity_text'] = value['text']
+                item['score'] = value['confidenceScore']
+                entities.append(item)
+            json_data['entities'] = entities
+            response_json = json.dumps(json_data)
+            
     else:
         if provider == "aws":
             json_data = {
