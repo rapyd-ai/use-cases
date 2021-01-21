@@ -432,7 +432,7 @@ def get_entities(response_json):
 def entities_extract_type(response_json, entity_type):
     entities = json.loads(response_json)['entities']
     json_data = {
-        'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        'meta': json.loads(response_json)['meta'],
     }
     types = [value["entity_text"] for value in entities if (value["entity_type"] == entity_type.upper() or value["entity_type"] == entity_type.lower() or value["entity_type"] == entity_type.capitalize())]
     json_data['types'] = types
