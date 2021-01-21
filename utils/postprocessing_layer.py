@@ -444,7 +444,7 @@ def entities_filter_confidence(response_json, confidence):
     json_data = {
         'meta': json.loads(response_json)['meta'],
     }
-    entities = json.loads(response_json)
+    entities = json.loads(response_json)['entities']
     labels = list(filter(lambda x: x['score'] > confidence, entities))
     json_data['entities'] = labels
     response_json = json.dumps(json_data)
