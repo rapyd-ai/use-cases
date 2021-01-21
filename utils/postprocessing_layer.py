@@ -376,7 +376,7 @@ def entities_extract_type(response_json, entity_type):
     except:
         print(response_json.text.encode('utf8'))
     
-    if (entity_type == "all".upper() or entity_type == "all".lower or entity_type == "all".capitalize()):
+    if (entity_type == "all".upper() or entity_type == "all".lower() or entity_type == "all".capitalize()):
         if provider == "aws":
             json_data = {
                 'meta': json.loads(response_json.text.encode('utf8'))['meta'],
