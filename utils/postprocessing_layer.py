@@ -337,6 +337,38 @@ def localize_aggregate(response_json, aggregate_function):
 
     return aggregate_response
 
+# Vision API - face service
+def get_faces(response_json):
+    try:
+        result = json.loads(response_json.text.encode('utf8'))['result']
+        provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
+    except:
+        print(response_json.text.encode('utf8'))
+    
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        faceDetection = result["faceDetails"]
+        json_data['faceDetails'] = faceDetection
+        response_json = json.dumps(json_data)
+    
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        json_data['faceDetails'] = result
+        response_json = json.dumps(json_data)
+    
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        faceDetection = result["faces"]
+        json_data['faceDetails'] = faceDetection
+        response_json = json.dumps(json_data)
+    
+    return response_json
 # Vision API - landmark service
 def landmark_bounding_boxes(response_json):
     provider = json.loads(response_json)['meta']['provider']
