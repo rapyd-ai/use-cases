@@ -431,35 +431,17 @@ def get_entities(response_json):
 
 def entities_extract_type(response_json, entity_type):
     try:
-        result = json.loads(response_json.text.encode('utf8'))['result']
+        entities = json.loads(response_json.text.encode('utf8'))['entities']
         provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
     except:
         print(response_json.text.encode('utf8'))
     
-    if provider == "aws":
-        json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-        }
-        entities = result['entities']
-        types = [value["text"] for value in entities if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
-        json_data['types'] = types
-        response_json = json.dumps(json_data)
-    
-    if provider == "gcp":
-        json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-        }
-        types = [value["name"] for value in result if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
-        json_data['types'] = types
-        response_json = json.dumps(json_data)
-        
-    if provider == "azure":
-        json_data = {
-            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-        }
-        types = [value["text"] for value in result if (value["category"] == entity_type.upper() or value["category"] == entity_type.lower() or value["category"] == entity_type.capitalize())]
-        json_data['types'] = types
-        response_json = json.dumps(json_data)
+    json_data = {
+        'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+    }
+    types = [value["entity_text"] for value in entities if (value["entity_type"] == entity_type.upper() or value["entity_type"] == entity_type.lower() or value["entity_type"] == entity_type.capitalize())]
+    json_data['types'] = types
+    response_json = json.dumps(json_data)
         
     return response_json
 
