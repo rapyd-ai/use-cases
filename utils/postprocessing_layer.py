@@ -440,6 +440,17 @@ def entities_extract_type(response_json, entity_type):
         
     return response_json
 
+def entities_filter_confidence(response_json, confidence):
+    json_data = {
+        'meta': json.loads(response_json)['meta'],
+    }
+    entities = json.loads(response_json)
+    labels = list(filter(lambda x: x['score'] > confidence, entities))
+    json_data['entities'] = labels
+    response_json = json.dumps(json_data)
+
+    return response_json
+
 
 def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
