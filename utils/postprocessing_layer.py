@@ -369,6 +369,65 @@ def landmark_bounding_boxes(response_json):
 
 # NLP API - entities service
 
+def get_entities(response_json):
+    try:
+        result = json.loads(response_json.text.encode('utf8'))['result']
+        provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
+    except:
+        print(response_json.text.encode('utf8'))
+    
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        instances = result['entities']
+        entities = []
+        for value in instances:
+            item = {}
+            item['startOffset'] = value['beginOffset']
+            item['endOffset'] = value['endOffset']
+            item['entity_type'] = value['type']
+            item['entity_text'] = value['text']
+            item['score'] = value['score']
+            entities.append(item)
+        json_data['entities'] = entities
+        response_json = json.dumps(json_data)
+    
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        instances = result['entities']
+        entities = []
+        for value in instances:
+            item = {}
+            item['startOffset'] = None
+            item['endOffset'] = None
+            item['entity_type'] = value['type']
+            item['entity_text'] = value['name']
+            item['score'] = value['salience']
+            entities.append(item)
+        json_data['entities'] = entities
+        response_json = json.dumps(json_data)
+    
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        instances = result['entities']
+        entities = []
+        for value in instances:
+            item = {}
+            item['startOffset'] = None
+            item['endOffset'] = None
+            item['entity_type'] = value['category']
+            item['entity_text'] = value['text']
+            item['score'] = value['confidenceScore']
+            entities.append(item)
+        json_data['entities'] = entities
+        response_json = json.dumps(json_data)
+
+
 def entities_extract_type(response_json, entity_type):
     try:
         result = json.loads(response_json.text.encode('utf8'))['result']
@@ -376,82 +435,31 @@ def entities_extract_type(response_json, entity_type):
     except:
         print(response_json.text.encode('utf8'))
     
-    if (entity_type == "all".upper() or entity_type == "all".lower() or entity_type == "all".capitalize()):
-        if provider == "aws":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            }
-            instances = result['entities']
-            entities = []
-            for value in instances:
-                item = {}
-                item['startOffset'] = value['beginOffset']
-                item['endOffset'] = value['endOffset']
-                item['entity_type'] = value['type']
-                item['entity_text'] = value['text']
-                item['score'] = value['score']
-                entities.append(item)
-            json_data['entities'] = entities
-            response_json = json.dumps(json_data)
-        
-        if provider == "gcp":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            }
-            entities = []
-            for value in result:
-                item = {}
-                item['startOffset'] = None
-                item['endOffset'] = None
-                item['entity_type'] = value['type']
-                item['entity_text'] = value['name']
-                item['score'] = value['salience']
-                entities.append(item)
-            json_data['entities'] = entities
-            response_json = json.dumps(json_data)
-        
-        if provider == "azure":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            }
-            entities = []
-            for value in result:
-                item = {}
-                item['startOffset'] = None
-                item['endOffset'] = None
-                item['entity_type'] = value['category']
-                item['entity_text'] = value['text']
-                item['score'] = value['confidenceScore']
-                entities.append(item)
-            json_data['entities'] = entities
-            response_json = json.dumps(json_data)
-            
-    else:
-        if provider == "aws":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            }
-            entities = result['entities']
-            types = [value["text"] for value in entities if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
-            json_data['types'] = types
-            response_json = json.dumps(json_data)
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        entities = result['entities']
+        types = [value["text"] for value in entities if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
+        json_data['types'] = types
+        response_json = json.dumps(json_data)
     
-        if provider == "gcp":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            }
-            types = [value["name"] for value in result if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
-            json_data['types'] = types
-            response_json = json.dumps(json_data)
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        types = [value["name"] for value in result if (value["type"] == entity_type.upper() or value["type"] == entity_type.lower() or value["type"] == entity_type.capitalize())]
+        json_data['types'] = types
+        response_json = json.dumps(json_data)
         
-        if provider == "azure":
-            json_data = {
-                'meta': json.loads(response_json.text.encode('utf8'))['meta'],
-            }
-            types = [value["text"] for value in result if (value["category"] == entity_type.upper() or value["category"] == entity_type.lower() or value["category"] == entity_type.capitalize())]
-            json_data['types'] = types
-            response_json = json.dumps(json_data)
-
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        types = [value["text"] for value in result if (value["category"] == entity_type.upper() or value["category"] == entity_type.lower() or value["category"] == entity_type.capitalize())]
+        json_data['types'] = types
+        response_json = json.dumps(json_data)
+        
     return response_json
 
 
