@@ -431,7 +431,7 @@ def get_entities(response_json):
 
 def entities_extract_type(response_json, entity_type):
     try:
-        entities = json.loads(response_json.text.encode('utf8'))['entities']
+        entities = json.loads(response_json)['entities']
         # provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
     except:
         print(response_json.text.encode('utf8'))
