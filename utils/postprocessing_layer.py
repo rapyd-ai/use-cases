@@ -426,7 +426,8 @@ def get_entities(response_json):
             entities.append(item)
         json_data['entities'] = entities
         response_json = json.dumps(json_data)
-
+    
+    return response_json
 
 def entities_extract_type(response_json, entity_type):
     try:
