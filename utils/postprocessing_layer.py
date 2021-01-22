@@ -428,10 +428,10 @@ def faces_bounding_boxes(response_json, img_width, img_height):
         for item in faceDetails:
             rectangles = item['boundingBox']
             bounding_box = {
-                'y1': round(rectangles['top'] * img_width),
-                'y2': round((rectangles['top'] * img_width) + (rectangles['height'] * img_width)),
-                'x1': round(rectangles['left'] * img_height),
-                'x2': round((rectangles['left'] * img_height) + (rectangles['width'] * img_height))
+                'y1': round(rectangles['top'] * img_height),
+                'y2': round((rectangles['top'] * img_height) + (rectangles['height'] * img_height)),
+                'x1': round(rectangles['left'] * img_width),
+                'x2': round((rectangles['left'] * img_width) + (rectangles['width'] * img_width))
             }
             boxes.append(bounding_box)
         json_data['bounding_box'] = boxes
@@ -596,6 +596,6 @@ def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
                 final = image
             else:
                 final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
-
+                
         cv2_write_image(final, output_file)
 
