@@ -577,9 +577,10 @@ def entities_filter_confidence(response_json, confidence):
 def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
     
-    # Defining Box params
+    # Defining standard params
     color = (0, 0, 255)
     thickness = 2
+    blur_strength = 55
 
     bounding_boxes = json.loads(bounding_boxes)["bounding_box"]
     if (bounding_boxes == [] or None):
@@ -590,7 +591,11 @@ def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
             y2 = value['y2']
             x1 = value['x1']
             x2 = value['x2']
-            final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
-            
+            if (transformation == "blur".upper() or transformation == "blur".lower() or transformation == "blur".capitalize()):
+                image[y1:y2,x1:x2] = cv2.medianBlur(image[y1:y2,x1:x2],blur_strength)
+                final = image
+            else:
+                final = cv2.rectangle(image, (x1, y1), (x2,y2), color, thickness)
+                
         cv2_write_image(final, output_file)
 
