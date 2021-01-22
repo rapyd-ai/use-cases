@@ -370,6 +370,32 @@ def get_faces(response_json):
     
     return response_json
 
+def faces_filter_confidence(response_json, confidence):
+    provider = json.loads(response_json)['meta']['provider']
+    faceDetails = json.loads(response_json)['faceDetails']
+
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        value = [item for item in faceDetails if item['detectionConfidence'] > confidence]
+        json_data['faceDetails'] = value
+        response_json = json.dumps(json_data)
+    
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        value = [item for item in faceDetails if item['confidence'] > confidence*100]
+        json_data['faceDetails'] = value
+        response_json = json.dumps(json_data)
+    
+    if provider == "azure":
+        pass
+
+    return response_json
+
+
 def faces_bounding_boxes(response_json, img_width, img_height):
     provider = json.loads(response_json)['meta']['provider']
     faceDetails = json.loads(response_json)['faceDetails']
@@ -432,6 +458,7 @@ def faces_bounding_boxes(response_json, img_width, img_height):
         response_json = json.dumps(json_data)
 
     return response_json
+
 # Vision API - landmark service
 def landmark_bounding_boxes(response_json):
     provider = json.loads(response_json)['meta']['provider']
