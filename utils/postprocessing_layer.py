@@ -369,6 +369,69 @@ def get_faces(response_json):
         response_json = json.dumps(json_data)
     
     return response_json
+
+def faces_bounding_boxes(response_json, img_width, img_height):
+    provider = json.loads(response_json)['meta']['provider']
+    faceDetails = json.loads(response_json)['faceDetails']
+    boxes = []
+
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in faceDetails:
+            rectangles = item['boundingPoly']
+            y1 = min([value['y'] for value in rectangles])
+            y2 = max([value['y'] for value in rectangles])
+            x1 = min([value['x'] for value in rectangles])
+            x2 = max([value['x'] for value in rectangles])
+            bounding_box = {
+                'y1': y1,
+                'y2': y2,
+                'x1': x1,
+                'x2': x2
+            }
+            boxes.append(bounding_box)
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+    
+    if provider == "aws":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in faceDetails:
+            rectangles = item['boundingBox']
+            bounding_box = {
+                'y1': round(rectangles['top'] * img_height),
+                'y2': round((rectangles['top'] * img_height) + (rectangles['height'] * img_height)),
+                'x1': round(rectangles['left'] * img_width),
+                'x2': round((rectangles['left'] * img_width) + (rectangles['width'] * img_width))
+            }
+            boxes.append(bounding_box)
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+    
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json)['meta']
+        }
+        for item in faceDetails:
+            rectangles = item['faceRectangle']
+            y1 = rectangles['top']
+            y2 = rectangles['top'] + rectangles['height']
+            x1 = rectangles['left']
+            x2 = rectangles['left'] + rectangles['width']
+            bounding_box = {
+                'y1': y1,
+                'y2': y2,
+                'x1': x1,
+                'x2': x2
+            }
+            boxes.append(bounding_box)
+        json_data['bounding_box'] = boxes
+        response_json = json.dumps(json_data)
+
+    return response_json
 # Vision API - landmark service
 def landmark_bounding_boxes(response_json):
     provider = json.loads(response_json)['meta']['provider']
