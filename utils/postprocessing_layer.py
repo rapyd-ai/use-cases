@@ -573,7 +573,6 @@ def entities_filter_confidence(response_json, confidence):
 
     return response_json
 
-
 def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
     
