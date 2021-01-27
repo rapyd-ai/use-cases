@@ -21,11 +21,7 @@ def rapydai_nlp(text, task, provider = "gcp", accountid = '', token = ''):
         'Authorization': 'Bearer '+token,
         'Content-Type': 'application/json'
     }
-    payload = {
-        "text": text,
-        "provider": provider,
-        "language": "auto"
-    }
+    payload = "{\n\"text\":\"" + text + "\",\n\"provider\":\"" + provider + "\",\n    \"language\":\""+ language + "\"\n}"
     response = requests.request("POST", url, headers=headers, json = payload)
     return response
 
