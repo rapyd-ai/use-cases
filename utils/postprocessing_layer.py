@@ -573,6 +573,77 @@ def entities_filter_confidence(response_json, confidence):
 
     return response_json
 
+# NLP API - Sentiment service
+def get_sentiment_scores(response_json):
+    try:
+        result = json.loads(response_json.text.encode('utf8'))['result']
+        provider = json.loads(response_json.text.encode('utf8'))['meta']['provider']
+    except:
+        print(response_json.text.encode('utf8'))
+    
+    if provider == "aws" or provider == "auto":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        try:
+            sentiment_score = {
+                'positive':  round(result['sentimentScore']['positive'],2),
+                'mixed':  round(result['result']['sentimentScore']['mixed'],2),
+                'neutral':  round(result['result']['sentimentScore']['neutral'],2),
+                'negative':  round(result['result']['sentimentScore']['negative'],2)
+            }
+        except:
+            sentiment_score = {
+                'positive':  None,
+                'mixed':  None,
+                'neutral':  None,
+                'negative':  None
+            }
+        json_data['sentiment'] = sentiment_score
+        response_json = json.dumps(json_data)
+    
+    if provider == "gcp":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        try:
+            x = result['Score']
+            min_x = -1
+            max_x = 1
+            normalized_sentiment = (x - min_x)/(max_x - min_x)
+            sentiment_score = {
+                'positive':  round(normalized_sentiment,2),
+                'negative':  round(1-normalized_sentiment,2)
+            }
+        except:
+            sentiment_score = {
+                'positive': None,
+                'negative': None
+            }
+        json_data['sentiment'] = sentiment_score
+        response_json = json.dumps(json_data)
+    
+    if provider == "azure":
+        json_data = {
+            'meta': json.loads(response_json.text.encode('utf8'))['meta'],
+        }
+        try:
+            sentiment_score = {
+                'positive':  round(result['documentSentiment']['positiveScore'],2),
+                'neutral':  round(result['documentSentiment']['neutralScore'],2),
+                'negative':  round(result['documentSentiment']['negativeScore'],2)
+            }
+        except:
+            sentiment_score = {
+                'positive': None,
+                'neutral': None,
+                'negative': None
+            }
+        json_data['sentiment'] = sentiment_score
+        response_json = json.dumps(json_data)
+
+    return response_json
+
 def cv2_transform_image(filepath, bounding_boxes, output_file, transformation):
     image = cv2.imread(filepath, cv2.IMREAD_UNCHANGED)
     
