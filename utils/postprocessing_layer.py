@@ -581,7 +581,7 @@ def get_sentiment_scores(response_json):
     except:
         print(response_json.text.encode('utf8'))
     
-    if provider == "aws" or provider == "auto":
+    if provider == "aws":
         json_data = {
             'meta': json.loads(response_json.text.encode('utf8'))['meta'],
         }
