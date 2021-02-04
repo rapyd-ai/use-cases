@@ -588,9 +588,9 @@ def get_sentiment_scores(response_json):
         try:
             sentiment_score = {
                 'positive':  round(result['sentimentScore']['positive'],2),
-                'mixed':  round(result['result']['sentimentScore']['mixed'],2),
-                'neutral':  round(result['result']['sentimentScore']['neutral'],2),
-                'negative':  round(result['result']['sentimentScore']['negative'],2)
+                'mixed':  round(result['sentimentScore']['mixed'],2),
+                'neutral':  round(result['sentimentScore']['neutral'],2),
+                'negative':  round(result['sentimentScore']['negative'],2)
             }
         except:
             sentiment_score = {
